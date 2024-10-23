@@ -7,6 +7,8 @@ package frc.robot.Subsytems;
 import java.io.File;
 import java.util.function.DoubleSupplier;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathConstraints;
@@ -19,7 +21,9 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -34,6 +38,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.AutonConstants;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
+import swervelib.SwerveModule;
 import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveControllerConfiguration;
 import swervelib.parser.SwerveDriveConfiguration;
@@ -132,7 +137,41 @@ public class SwerveSubsystem extends SubsystemBase {
                 swerveDrive.addVisionMeasurement(visionPose, timeStamp);
             }
         }
+        SwerveModule[] modules = swerveDrive.getModules();
+        for (int i = 0; i < modules.length; i++) {
+            SwerveModuleState state = modules[i].getState();
+            Logger.recordOutput("SwerveSubsystem/Module" + i + "/Angle", state.angle.getDegrees());
+            Logger.recordOutput("SwerveSubsystem/Module" + i + "/Speed", state.speedMetersPerSecond);
+        }
+    
+        // Log robot pose
+        Rotation2d pitch = swerveDrive.getPitch(); // Rotation around the X-axis
+Rotation2d roll = swerveDrive.getRoll();   // Rotation around the Y-axis
+Rotation2d yaw = getHeading();             // Rotation around the Z-axis (already obtained)
+
+double x = getPose().getX();
+double y = getPose().getY();
+double z = 0 ;
+        Pose2d pose = getPose();
+        Logger.recordOutput("SwerveSubsystem/Pose/X", pose.getX());
+        Logger.recordOutput("SwerveSubsystem/Pose/Y", pose.getY());
+        Logger.recordOutput("SwerveSubsystem/Pose/Rotation", pose.getRotation().getDegrees());
+        Logger.recordOutput("SwerveSubsystem/Pose2d", pose);
+        Pose3d pose3d = new Pose3d(
+    new Translation3d(x,y,z),
+    new Rotation3d(
+        pitch.getRadians(),
+        roll.getRadians(),
+        yaw.getRadians()
+    )
+);
+    Logger.recordOutput("SwerveSubsystem/Pose3d", pose3d);
+
+
     }
+    
+
+    
 
     @Override
     public void simulationPeriodic() {
@@ -539,14 +578,15 @@ public class SwerveSubsystem extends SubsystemBase {
     }
     public Command simDriveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier rotation) {
         return Commands.run(() -> {
-            ChassisSpeeds speeds = new ChassisSpeeds(
-                translationX.getAsDouble() * swerveDrive.getMaximumVelocity(),
-                translationY.getAsDouble() * swerveDrive.getMaximumVelocity(),
-                rotation.getAsDouble() * swerveDrive.getMaximumAngularVelocity()
-            );
+            double xSpeed = Math.pow(translationX.getAsDouble(), 3) * swerveDrive.getMaximumVelocity();
+            double ySpeed = Math.pow(translationY.getAsDouble(), 3) * swerveDrive.getMaximumVelocity();
+            double rotSpeed = Math.pow(rotation.getAsDouble(), 3) * swerveDrive.getMaximumAngularVelocity();
+    
+            ChassisSpeeds speeds = new ChassisSpeeds(xSpeed, ySpeed, rotSpeed);
             swerveDrive.drive(speeds);
         }, this);
     }
+    
 
     public Command sysIdDriveMotorCommand() {
         return Commands.run(() -> {

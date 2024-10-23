@@ -6,11 +6,14 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Commands.AbsoluteDriveAdv;
+import org.littletonrobotics.junction.Logger;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
@@ -61,10 +64,11 @@ public class RobotContainer
         () -> MathUtil.applyDeadband(driverController.getLeftX() * -1, OperatorConstants.LEFT_X_DEADBAND),
         () -> driverController.getRightX() * -1);
 
-    Command driveFieldOrientedDirectAngleSim = Constants.Subsytems.SWERVE_SUBSYSTEM.simDriveCommand(
-        () -> MathUtil.applyDeadband(driverController.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-        () -> MathUtil.applyDeadband(driverController.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
-        () -> driverController.getRawAxis(2));
+        Command driveFieldOrientedDirectAngleSim = Constants.Subsytems.SWERVE_SUBSYSTEM.simDriveCommand(
+            () -> MathUtil.applyDeadband(driverController.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
+            () -> MathUtil.applyDeadband(driverController.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+            () -> MathUtil.applyDeadband(driverController.getRightX(), OperatorConstants.RIGHT_X_DEADBAND));
+        
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -73,6 +77,7 @@ public class RobotContainer
     {
         // Configure the trigger bindings
         configureBindings();
+     
     }
 
     /**
@@ -130,4 +135,6 @@ public class RobotContainer
     {
         Constants.Subsytems.SWERVE_SUBSYSTEM.setMotorBrake(brake);
     }
+
+
 }

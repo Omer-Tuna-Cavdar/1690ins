@@ -1,0 +1,14 @@
+{
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/Pigeon 2 (v6) [1]": "Gyro",
+      "/SmartDashboard/Start Swerve Simulation": "Command",
+      "/SmartDashboard/Stop Swerve Simulation": "Command"
+    }
+  },
+  "NetworkTables Info": {
+    "visible": true
+  }
+}

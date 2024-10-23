@@ -4,7 +4,13 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.TimedRobot;
+import org.littletonrobotics.junction.LoggedRobot;
+import org.littletonrobotics.junction.networktables.NT4Publisher;
+import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.networktables.NT4Publisher;
+
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -14,11 +20,11 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * described in the TimedRobot documentation. If you change the name of this class or the package after creating this
  * project, you must also update the build.gradle file in the project.
  */
-public class Robot extends TimedRobot
+public class Robot extends LoggedRobot 
 {
 
-  private static Robot   instance;
-  private        Command m_autonomousCommand;
+  private static Robot instance;
+  private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
 
@@ -47,6 +53,14 @@ public class Robot extends TimedRobot
     // Create a timer to disable motor brake a few seconds after disable.  This will let the robot stop
     // immediately when disabled, but then also let it be pushed more 
     disabledTimer = new Timer();
+    Logger.recordMetadata("1690fln", "1690fln");
+
+        // Set the data receivers (e.g., AdvantageScope network tables and log files)
+        Logger.addDataReceiver(new NT4Publisher()); // For live telemetry
+        Logger.addDataReceiver(new WPILOGWriter("/home/lvuser/logs")); // For recording logs
+
+        // Start the logger
+        Logger.start();
   }
 
   /**
@@ -159,6 +173,8 @@ public class Robot extends TimedRobot
   @Override
   public void simulationInit()
   {
+    Constants.Subsytems.SWERVE_SUBSYSTEM.centerModules();
+
   }
 
   /**
@@ -168,4 +184,5 @@ public class Robot extends TimedRobot
   public void simulationPeriodic()
   {
   }
+    
 }
