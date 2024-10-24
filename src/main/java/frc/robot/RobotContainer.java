@@ -123,7 +123,10 @@ public class RobotContainer
     public Command getAutonomousCommand()
     {
         // An example command will be run in autonomous
-        return Constants.Subsytems.SWERVE_SUBSYSTEM.getAutonomousCommand("New Auto");
+        return Constants.Subsytems.SWERVE_SUBSYSTEM.getAutonomousCommand("AutoDeneme");
+    }
+    public Pose2d getAutoStartPose(){
+        return Constants.Subsytems.SWERVE_SUBSYSTEM.getautoStartPose("AutoDeneme");
     }
 
     public void setDriveMode()

@@ -58,9 +58,10 @@ public class Robot extends LoggedRobot
         // Set the data receivers (e.g., AdvantageScope network tables and log files)
         Logger.addDataReceiver(new NT4Publisher()); // For live telemetry
         Logger.addDataReceiver(new WPILOGWriter("/home/lvuser/logs")); // For recording logs
-
+        Constants.Subsytems.SWERVE_SUBSYSTEM.resetOdometry(m_robotContainer.getAutoStartPose());
         // Start the logger
         Logger.start();
+        
   }
 
   /**
@@ -109,7 +110,6 @@ public class Robot extends LoggedRobot
   {
     m_robotContainer.setMotorBrake(true);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null)
     {

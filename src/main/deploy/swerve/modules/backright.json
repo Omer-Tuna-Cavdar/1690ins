@@ -9,6 +9,7 @@
     "id": 17,
     "canbus": null
   },
+  
   "angle": {
     "type": "sparkflex",
     "id": 18,
@@ -20,7 +21,7 @@
     "canbus": null
   },
   "inverted": {
-    "drive": false,
+    "drive": true,
     "angle": false
   },
   "absoluteEncoderInverted": false

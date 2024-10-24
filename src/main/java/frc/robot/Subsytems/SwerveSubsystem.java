@@ -166,7 +166,7 @@ double z = 0 ;
     )
 );
     Logger.recordOutput("SwerveSubsystem/Pose3d", pose3d);
-
+    Logger.recordOutput("SwerveSubsystem/Odometry", getPose());
 
     }
     
@@ -294,7 +294,10 @@ double z = 0 ;
         // Create a path following command using AutoBuilder. This will also trigger event markers.
         return new PathPlannerAuto(pathName);
     }
-
+    public Pose2d getautoStartPose(String pathName){
+        return PathPlannerAuto.getStaringPoseFromAutoFile(pathName);
+    }
+    
     /**
      * Use PathPlanner Path finding to go to a point on the field.
      *
