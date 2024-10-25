@@ -2,6 +2,8 @@ package frc.robot;
 
 import java.io.File;
 
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.pathplanner.lib.util.PIDConstants;
 
 import edu.wpi.first.math.geometry.Translation3d;
@@ -45,4 +47,34 @@ public final class Constants
   public static class Subsytems{
     public static final SwerveSubsystem SWERVE_SUBSYSTEM = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),"swerve"));
   }
+public static final class PivotConstants {
+        public static final int kPivotMotor1CanId = 21;
+        public static final int kPivotMotor2CanId = 22;
+        public static final Slot0Configs kPivotConfiguration = new Slot0Configs();
+
+        static {
+            kPivotConfiguration.kP = 0.75;
+            kPivotConfiguration.kI = 0;
+            kPivotConfiguration.kD = 0.001;
+        }
+
+        public static final MotionMagicConfigs kPivotMotionMagic = new MotionMagicConfigs();
+
+        static {
+            kPivotMotionMagic.MotionMagicCruiseVelocity = 200;
+            kPivotMotionMagic.MotionMagicAcceleration = 100;
+        }
+
+        public static final double kIntakePosition = 2;
+        public static final double kAmpScoringPosition = 17.5;
+        public static final double kSubwooferShotPosition = 9;
+        public static final double kReverseShotPosition = 18.25;
+        public static final double kStowPosition = 0.5;
+        public static final double kEjectPosition = 10;
+        public static final double kOuttakePosition = 5;
+        public static final double kPivotErrorMargin = 0.2;
+        public static final double kMinFeedPosition = 4;
+    }
+
+
 }
