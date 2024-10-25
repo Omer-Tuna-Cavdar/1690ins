@@ -143,7 +143,7 @@ public class LimelightHelpers {
         private double[] targetPose_CameraSpace;
 
         @JsonProperty("t6t_rs")
-        private double[] targetPose_RobotSpace;
+        public double[] targetPose_RobotSpace;
 
         public Pose3d getCameraPose_TargetSpace()
         {

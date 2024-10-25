@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Commands.AbsoluteDriveAdv;
+import frc.robot.Commands.DriveToAmpAndShootCommand;
+import frc.robot.Commands.ShootoSpeakerAutoAngle;
 
 
 /**
@@ -48,6 +50,7 @@ public class RobotContainer
         () -> MathUtil.applyDeadband(driverController.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
         () -> driverController.getRightX(),
         () -> driverController.getRightY());
+    Command ShootoSpeakerAutoAngle  = new ShootoSpeakerAutoAngle(Constants.Subsytems.pivot, Constants.Subsytems.vision, Constants.Subsytems.shooter, Constants.Subsytems.intake, Constants.Subsytems.SWERVE_SUBSYSTEM);
 
     // Applies deadbands and inverts controls because joysticks
     // are back-right positive while robot
@@ -84,7 +87,8 @@ public class RobotContainer
             driverController.cross().onTrue(Commands.runOnce(Constants.Subsytems.SWERVE_SUBSYSTEM::zeroGyro));
             driverController.triangle().whileTrue(Constants.Subsytems.SWERVE_SUBSYSTEM.aimAtSpeaker(2));
             driverController.L1().whileTrue(Commands.runOnce(Constants.Subsytems.SWERVE_SUBSYSTEM::lock, Constants.Subsytems.SWERVE_SUBSYSTEM).repeatedly());
-          
+            driverController.R2().onTrue(ShootoSpeakerAutoAngle);
+            driverController.L2().onTrue(ShootoSpeakerAutoAngle);
             Constants.Subsytems.SWERVE_SUBSYSTEM.setDefaultCommand(
                 !RobotBase.isSimulation() ? driveFieldOrientedDirectAngle : driveFieldOrientedDirectAngleSim);
         

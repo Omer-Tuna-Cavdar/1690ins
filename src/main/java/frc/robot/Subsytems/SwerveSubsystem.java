@@ -26,6 +26,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -273,7 +274,7 @@ double z = 0 ;
     public Command aimAtTarget() {
         return Commands.run(() -> {
             if (vision.hasTarget()) {
-                double tx = vision.getTX();
+                double tx = vision.getTX(null);
                 double rotationSpeed = rotationController.calculate(tx, 0);
                 drive(new ChassisSpeeds(0, 0, rotationSpeed));
             } else {
@@ -623,5 +624,15 @@ double z = 0 ;
     public void setMotorBrake(boolean brake) {
         swerveDrive.setMotorIdleMode(brake);
     }
+    public SwerveModulePosition[] getModulePositions() {
+        SwerveModule[] modules = swerveDrive.getModules();
+        SwerveModulePosition [] modulePositions = new SwerveModulePosition [modules.length];
+        
+        for (int i = 0; i < modules.length; i++) {
+            modulePositions[i] = modules[i].getPosition();
+        }
+        return modulePositions;
+    }
+    
 
 }

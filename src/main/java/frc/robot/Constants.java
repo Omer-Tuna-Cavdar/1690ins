@@ -6,9 +6,13 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.pathplanner.lib.util.PIDConstants;
 
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
+import frc.robot.Subsytems.Intake;
+import frc.robot.Subsytems.Pivot;
+import frc.robot.Subsytems.Shooter;
 import frc.robot.Subsytems.SwerveSubsystem;
 import frc.robot.Subsytems.Vision;
 import swervelib.math.Matter;
@@ -32,6 +36,8 @@ public final class Constants
     public static final int kIntakeIrBeamBreakPort = 1;
     public static final int kShooterRId = 41;
     public static final boolean INTAKE_ROLLER_INVERTED = false;
+    public static final double Intake_Roller_Speed = 0;
+    public static final double Intake_Roller_Speed_ForAmp = 0;
   
     
   }
@@ -44,6 +50,8 @@ public final class Constants
     public static final double SHOOTER_TARGET_RPM = 8000.0;
     public static final int kShooterLId = 31;
     public static final int kShooterRId= 32;
+    public static final double SHOOTER_RPM_Scailing_Per_Meter = 0;
+	public static final double SHOOTER_RPM_FORAMP = 100;
   }
   public static final class DrivebaseConstants
   {
@@ -63,7 +71,10 @@ public final class Constants
   }
   public static class Subsytems{
     public static final SwerveSubsystem SWERVE_SUBSYSTEM = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),"swerve"));
-    public static final  Vision vision= new Vision("Ordek"); 
+    public static final Vision vision= new Vision("Ordek"); 
+    public static final Shooter shooter = new Shooter();
+    public static final Intake intake = new Intake();
+    public static final Pivot pivot = new Pivot();
   }
 public static final class PivotConstants {
         public static final int kPivotMotor1CanId = 21;
@@ -98,11 +109,15 @@ public static final class PivotConstants {
         public static final double gearReduction = 1;
     }
     public static final class FieldConstants{
-
-    public static final double SPEAKER_X_BLUE = 0;
-    public static final double SPEAKER_Y_BLUE = 0;
-    public static final double SPEAKER_Z_BLUE = 0;
-    public static final double fieldLength = 0;
+      public static final double SPEAKER_TARGET_HEIGHT = 2.11; // Speaker target height in meters
+      public static final double AMP_TARGET_HEIGHT = 1.3558;   // Amp target height in meters
+      public static final double SOURCE_TARGET_HEIGHT = 0.5338; // Source target height in meters
+  
+      // Constants for AprilTag heights in meters
+      public static final double SPEAKER_TAG_HEIGHT = 0.5713;
+      public static final double AMP_TAG_HEIGHT = 1.3558;
+      public static final double SOURCE_TAG_HEIGHT = 0.5338;
+  
       
     }
 
