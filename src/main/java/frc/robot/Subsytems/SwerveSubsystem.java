@@ -61,7 +61,7 @@ public class SwerveSubsystem extends SubsystemBase {
     /**
      * Vision system instance.
      */
-    private final Vision vision;
+    private final Vision vision = Constants.Subsytems.vision;
 
     /**
      * PID Controller for rotation control using Limelight.
@@ -107,7 +107,7 @@ public class SwerveSubsystem extends SubsystemBase {
         swerveDrive.pushOffsetsToEncoders(); // Set the absolute encoder to be used over the internal encoder and push the offsets onto it. Throws warning if not possible
 
         // Initialize the Vision system
-        vision = new Vision("Ordek");
+       
 
         setupPathPlanner();
     }
@@ -120,7 +120,6 @@ public class SwerveSubsystem extends SubsystemBase {
      */
     public SwerveSubsystem(SwerveDriveConfiguration driveCfg, SwerveControllerConfiguration controllerCfg) {
         swerveDrive = new SwerveDrive(driveCfg, controllerCfg, Constants.MAX_SPEED);
-        vision = new Vision("limelight");
     }
 
     @Override

@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
 import frc.robot.Subsytems.SwerveSubsystem;
+import frc.robot.Subsytems.Vision;
 import swervelib.math.Matter;
 
 public final class Constants
@@ -27,7 +28,23 @@ public final class Constants
     public static final PIDConstants TRANSLATION_PID = new PIDConstants(0.7, 0, 0);
     public static final PIDConstants ANGLE_PID       = new PIDConstants(0.4, 0, 0.01);
   }
-
+  public static final class IntakeConstants {
+    public static final int kIntakeIrBeamBreakPort = 1;
+    public static final int kShooterRId = 41;
+    public static final boolean INTAKE_ROLLER_INVERTED = false;
+  
+    
+  }
+  public static final class ShooterConstans {
+    public static final double kShooterP = 0.7;
+    public static final double kShooterI = 0.0;
+    public static final double kShooterD = 0.0;
+    public static final double kShooterPositionTolerance = 3.0;
+    public static final double kShooterVelocityTolerance = 3.0;
+    public static final double SHOOTER_TARGET_RPM = 8000.0;
+    public static final int kShooterLId = 31;
+    public static final int kShooterRId= 32;
+  }
   public static final class DrivebaseConstants
   {
 
@@ -46,16 +63,19 @@ public final class Constants
   }
   public static class Subsytems{
     public static final SwerveSubsystem SWERVE_SUBSYSTEM = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),"swerve"));
+    public static final  Vision vision= new Vision("Ordek"); 
   }
 public static final class PivotConstants {
         public static final int kPivotMotor1CanId = 21;
         public static final int kPivotMotor2CanId = 22;
+        public static final int kPivotIrBeamBreakPort = 0;
         public static final Slot0Configs kPivotConfiguration = new Slot0Configs();
-
+        
         static {
             kPivotConfiguration.kP = 0.75;
             kPivotConfiguration.kI = 0;
             kPivotConfiguration.kD = 0.001;
+        
         }
 
         public static final MotionMagicConfigs kPivotMotionMagic = new MotionMagicConfigs();
@@ -63,6 +83,7 @@ public static final class PivotConstants {
         static {
             kPivotMotionMagic.MotionMagicCruiseVelocity = 200;
             kPivotMotionMagic.MotionMagicAcceleration = 100;
+
         }
 
         public static final double kIntakePosition = 2;
@@ -74,7 +95,17 @@ public static final class PivotConstants {
         public static final double kOuttakePosition = 5;
         public static final double kPivotErrorMargin = 0.2;
         public static final double kMinFeedPosition = 4;
+        public static final double gearReduction = 1;
     }
+    public static final class FieldConstants{
+
+    public static final double SPEAKER_X_BLUE = 0;
+    public static final double SPEAKER_Y_BLUE = 0;
+    public static final double SPEAKER_Z_BLUE = 0;
+    public static final double fieldLength = 0;
+      
+    }
+
 
 
 }

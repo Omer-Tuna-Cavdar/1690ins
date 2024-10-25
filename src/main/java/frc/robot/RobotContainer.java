@@ -2,17 +2,12 @@ package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Commands.AbsoluteDriveAdv;
-import org.littletonrobotics.junction.Logger;
 
 
 /**
@@ -23,7 +18,7 @@ import org.littletonrobotics.junction.Logger;
 public class RobotContainer
 {
     // Use CommandPS4Controller for PS5 controller support with command-based methods
-    final CommandPS4Controller driverController = new CommandPS4Controller(0);
+    final CommandPS5Controller driverController = new CommandPS5Controller(0);
 
     // The robot's subsystems and commands are defined here...
 
@@ -85,34 +80,14 @@ public class RobotContainer
      */
     private void configureBindings()
     {
-        if (DriverStation.isTest())
-        {
-            driverController.circle().whileTrue(Constants.Subsytems.SWERVE_SUBSYSTEM.sysIdDriveMotorCommand());
-            driverController.square().whileTrue(Commands.runOnce(Constants.Subsytems.SWERVE_SUBSYSTEM::lock, Constants.Subsytems.SWERVE_SUBSYSTEM).repeatedly());
-            driverController.triangle().whileTrue(Constants.Subsytems.SWERVE_SUBSYSTEM.driveToDistanceCommand(1.0, 0.2));
-            driverController.options().onTrue(Commands.runOnce(Constants.Subsytems.SWERVE_SUBSYSTEM::zeroGyro));
-            driverController.share().whileTrue(Constants.Subsytems.SWERVE_SUBSYSTEM.centerModulesCommand());
-            driverController.L1().onTrue(Commands.none());
-            driverController.R1().onTrue(Commands.none());
-            Constants.Subsytems.SWERVE_SUBSYSTEM.setDefaultCommand(
-                !RobotBase.isSimulation() ? driveFieldOrientedAngularVelocity : driveFieldOrientedDirectAngleSim);
-        }
-        else
-        {
+        // Configure the button bindings
             driverController.cross().onTrue(Commands.runOnce(Constants.Subsytems.SWERVE_SUBSYSTEM::zeroGyro));
-            driverController.square().onTrue(Commands.runOnce(Constants.Subsytems.SWERVE_SUBSYSTEM::addFakeVisionReading));
-            driverController.circle().whileTrue(
-                Commands.deferredProxy(() -> Constants.Subsytems.SWERVE_SUBSYSTEM.driveToPose(
-                    new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
-                ));
             driverController.triangle().whileTrue(Constants.Subsytems.SWERVE_SUBSYSTEM.aimAtSpeaker(2));
-            driverController.options().whileTrue(Commands.none());
-            driverController.share().whileTrue(Commands.none());
             driverController.L1().whileTrue(Commands.runOnce(Constants.Subsytems.SWERVE_SUBSYSTEM::lock, Constants.Subsytems.SWERVE_SUBSYSTEM).repeatedly());
-            driverController.R1().onTrue(Commands.none());
+          
             Constants.Subsytems.SWERVE_SUBSYSTEM.setDefaultCommand(
                 !RobotBase.isSimulation() ? driveFieldOrientedDirectAngle : driveFieldOrientedDirectAngleSim);
-        }
+        
     }
 
     /**
