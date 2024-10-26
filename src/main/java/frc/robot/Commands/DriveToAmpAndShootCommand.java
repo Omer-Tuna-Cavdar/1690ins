@@ -155,10 +155,6 @@ public class DriveToAmpAndShootCommand extends Command {
 
     /**
      * Calculates the desired yaw angle for the robot to face the amp based on the robot's and amp's poses.
-     *
-     * @param robotPose   The current pose of the robot.
-     * @param ampPose The pose of the amp obtained from Vision's AprilTag reading.
-     * @return The desired yaw angle as a Rotation2d object.
      */
     private Rotation2d calculateDesiredYaw(Pose2d robotPose, Pose2d ampPose) {
         // Calculate the relative translation from the robot to the amp
@@ -176,10 +172,6 @@ public class DriveToAmpAndShootCommand extends Command {
     /**
      * Calculates the rotational rate needed to turn the robot towards the desired yaw.
      * This uses a simple proportional control for demonstration purposes.
-     *
-     * @param currentYaw The current yaw of the robot.
-     * @param desiredYaw The desired yaw to face the amp.
-     * @return The rotational speed in radians per second.
      */
     private double calculateYawRate(Rotation2d currentYaw, Rotation2d desiredYaw) {
         double yawErrorDegrees = desiredYaw.minus(currentYaw).getDegrees();

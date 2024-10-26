@@ -2,14 +2,14 @@ package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.Commands.AbsoluteDriveAdv;
-import frc.robot.Commands.DriveToAmpAndShootCommand;
-import frc.robot.Commands.ShootoSpeakerAutoAngle;
+import frc.robot.Commands.*;
 
 
 /**
@@ -19,6 +19,7 @@ import frc.robot.Commands.ShootoSpeakerAutoAngle;
  */
 public class RobotContainer
 {
+    
     // Use CommandPS4Controller for PS5 controller support with command-based methods
     final CommandPS5Controller driverController = new CommandPS5Controller(0);
 
@@ -50,8 +51,7 @@ public class RobotContainer
         () -> MathUtil.applyDeadband(driverController.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
         () -> driverController.getRightX(),
         () -> driverController.getRightY());
-    Command ShootoSpeakerAutoAngle  = new ShootoSpeakerAutoAngle(Constants.Subsytems.pivot, Constants.Subsytems.vision, Constants.Subsytems.shooter, Constants.Subsytems.intake, Constants.Subsytems.SWERVE_SUBSYSTEM);
-    Command DriveToAmpAndShootCommand = new DriveToAmpAndShootCommand(Constants.Subsytems.SWERVE_SUBSYSTEM, Constants.Subsytems.vision, Constants.Subsytems.shooter, Constants.Subsytems.pivot, Constants.Subsytems.intake);
+    
     // Applies deadbands and inverts controls because joysticks
     // are back-right positive while robot
     // controls are front-left positive
@@ -66,15 +66,18 @@ public class RobotContainer
             () -> MathUtil.applyDeadband(driverController.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
             () -> MathUtil.applyDeadband(driverController.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
             () -> MathUtil.applyDeadband(driverController.getRightX(), OperatorConstants.RIGHT_X_DEADBAND));
-        
-
+    Command ShootoSpeakerAutoAngle  = new ShootoSpeakerAutoAngle(Constants.Subsytems.pivot, Constants.Subsytems.vision, Constants.Subsytems.shooter, Constants.Subsytems.intake, Constants.Subsytems.SWERVE_SUBSYSTEM);
+    Command DriveToAmpAndShootCommand = new DriveToAmpAndShootCommand(Constants.Subsytems.SWERVE_SUBSYSTEM, Constants.Subsytems.vision, Constants.Subsytems.shooter, Constants.Subsytems.pivot, Constants.Subsytems.intake);
+    Command IntakeNote = new IntakeNote(Constants.Subsytems.intake);
+    private final Notifier intakeNotifier = new Notifier(() -> IntakeNote.schedule());
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer()
     {
-        // Configure the trigger bindings
-        configureBindings();
+
+        intakeNotifier.startPeriodic(0.005);  // 5 ms interval
+        configureBindings();    
      
     }
 
@@ -85,10 +88,10 @@ public class RobotContainer
     {
         // Configure the button bindings
             driverController.cross().onTrue(Commands.runOnce(Constants.Subsytems.SWERVE_SUBSYSTEM::zeroGyro));
-            driverController.triangle().whileTrue(Constants.Subsytems.SWERVE_SUBSYSTEM.aimAtSpeaker(2));
             driverController.L1().whileTrue(Commands.runOnce(Constants.Subsytems.SWERVE_SUBSYSTEM::lock, Constants.Subsytems.SWERVE_SUBSYSTEM).repeatedly());
             driverController.R2().onTrue(ShootoSpeakerAutoAngle);
-            driverController.L2().whileTrue(DriveToAmpAndShootCommand);
+            driverController.L2().onTrue(DriveToAmpAndShootCommand);
+            driverController.R1().onTrue(IntakeNote);
             Constants.Subsytems.SWERVE_SUBSYSTEM.setDefaultCommand(
                 !RobotBase.isSimulation() ? driveFieldOrientedDirectAngle : driveFieldOrientedDirectAngleSim);
         
