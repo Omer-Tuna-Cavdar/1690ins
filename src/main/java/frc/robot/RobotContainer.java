@@ -51,7 +51,7 @@ public class RobotContainer
         () -> driverController.getRightX(),
         () -> driverController.getRightY());
     Command ShootoSpeakerAutoAngle  = new ShootoSpeakerAutoAngle(Constants.Subsytems.pivot, Constants.Subsytems.vision, Constants.Subsytems.shooter, Constants.Subsytems.intake, Constants.Subsytems.SWERVE_SUBSYSTEM);
-
+    Command DriveToAmpAndShootCommand = new DriveToAmpAndShootCommand(Constants.Subsytems.SWERVE_SUBSYSTEM, Constants.Subsytems.vision, Constants.Subsytems.shooter, Constants.Subsytems.pivot, Constants.Subsytems.intake);
     // Applies deadbands and inverts controls because joysticks
     // are back-right positive while robot
     // controls are front-left positive
@@ -88,7 +88,7 @@ public class RobotContainer
             driverController.triangle().whileTrue(Constants.Subsytems.SWERVE_SUBSYSTEM.aimAtSpeaker(2));
             driverController.L1().whileTrue(Commands.runOnce(Constants.Subsytems.SWERVE_SUBSYSTEM::lock, Constants.Subsytems.SWERVE_SUBSYSTEM).repeatedly());
             driverController.R2().onTrue(ShootoSpeakerAutoAngle);
-            driverController.L2().onTrue(ShootoSpeakerAutoAngle);
+            driverController.L2().whileTrue(DriveToAmpAndShootCommand);
             Constants.Subsytems.SWERVE_SUBSYSTEM.setDefaultCommand(
                 !RobotBase.isSimulation() ? driveFieldOrientedDirectAngle : driveFieldOrientedDirectAngleSim);
         
