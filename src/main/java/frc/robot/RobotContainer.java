@@ -75,10 +75,8 @@ public class RobotContainer
      */
     public RobotContainer()
     {
-
-        intakeNotifier.startPeriodic(0.005);  // 5 ms interval
+        intakeNotifier.startPeriodic(0.0005);  // 0.5 ms interval same as the beam break sensor
         configureBindings();    
-     
     }
 
     /**

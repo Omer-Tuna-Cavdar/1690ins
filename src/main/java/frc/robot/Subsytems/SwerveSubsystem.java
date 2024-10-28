@@ -129,13 +129,15 @@ public class SwerveSubsystem extends SubsystemBase {
         swerveDrive.updateOdometry();
 
         // Get vision data
-        if (vision.hasTarget()) {
+        if (vision != null && vision.hasTarget()) {
             Pose2d visionPose = vision.getLatestPose();
             if (visionPose != null) {
                 double latency = vision.getLatency();
                 double timeStamp = Timer.getFPGATimestamp() - (latency / 1000.0);
                 swerveDrive.addVisionMeasurement(visionPose, timeStamp);
             }
+        } else if (vision == null) {
+            System.out.println("[SwerveSubsystem] Vision subsystem is not initialized.");
         }
         SwerveModule[] modules = swerveDrive.getModules();
         for (int i = 0; i < modules.length; i++) {

@@ -1,5 +1,7 @@
 package frc.robot.Subsytems;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
@@ -7,6 +9,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -22,8 +25,7 @@ public class Pivot extends SubsystemBase {
     private final TalonFX pivotMotor2;
     private final Follower followerControl;
     private final MotionMagicDutyCycle motionMagicControl;
-    private final TalonFXConfiguration pivotMotorConfig;
-    
+    private final TalonFXConfiguration pivotMotorConfig;  
 
     public Pivot() {
         pivotMotor1 = new TalonFX(Constants.PivotConstants.kPivotMotor1CanId);
@@ -75,6 +77,7 @@ public class Pivot extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Pivot Position", pivotMotor1.getPosition().getValueAsDouble());
+        Logger.recordOutput("Pivot Position", getPosition());
     }
     public boolean isPivotBeamBroken() {
         return !irBeamBreak.get(); // irBeamBreak is active-low

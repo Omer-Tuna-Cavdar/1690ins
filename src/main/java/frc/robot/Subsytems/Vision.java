@@ -48,7 +48,7 @@ public class Vision extends SubsystemBase {
 
     public Vision(String limelightName) {
         this.limelightName = limelightName;
-        this.alliance = DriverStation.getAlliance().get(); // Get alliance color at startup
+        this.alliance = DriverStation.getAlliance().orElse(Alliance.Blue); // Get alliance color at startup
     }
 
     /**
